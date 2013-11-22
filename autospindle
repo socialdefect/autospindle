@@ -26,8 +26,13 @@ sudo modprobe nbd max_part=16
 if [ -e $2 ] ; then
 	echo 'No stage4 script given, will continue without...'
 else
-	echo 'Copying stage4 script to chroot...'
-	cp -v "$2" "$1"/$HOME/bin/spindle/
+	if [ -f "$2" ] ; then 
+		echo 'Copying stage4 script to chroot...'
+		cp -v "$2" "$1"/$HOME/bin/spindle/
+	else
+		echo 'given stage4 script not found, assuming the script is in the chroot environment in spindles path!'
+		echo 'if not please create the script in the next step.'
+	fi
 fi
 echo ; echo 'You will now enter the spindle chroot environment where you can make manual changes.' 
 echo 'Type exit when done making changes to continue building your image.'
