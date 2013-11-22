@@ -39,13 +39,16 @@ echo 'Type exit when done making changes to continue building your image.'
 echo
 schroot -c spindle
 	errortest
-if [ `qemu --version | awk '{print $4}' | tr -d ',' != '1.0,1' ] ; then 
+if [ `qemu --version | awk '{print $4}' | tr -d ','` != '1.0,1' ] ; then 
 	schroot -c spindle sudo ./downgrade_qemu
 	errortest
 fi
 
-for i in './wheezy-stage0' './wheezy-stage1' './wheezy-stage2' './wheezy-stage3' ; do
+for i in 'wheezy-stage0' 'wheezy-stage1' 'wheezy-stage2' 'wheezy-stage3' ; do
 	if [ $? = 0 ] ; then
+		echo
+		echo "	 Will Now Start Executing: $i"
+		echo
 		schroot -c spindle $i
 	else
 		echo "ERROR while executing $i, will now quit!"
@@ -62,7 +65,7 @@ fi
 schroot -c spindle ./helper export_image_for_release out/"$FILENAME".qed "$FILENAME".img
 
 if [ $? = 0 ] ; then
-	echo ; echo "Your Raspi image is ready in "$1"/"$HOME"/out/"$FILENAME".img"
+	echo ; echo "Your Raspi image is ready in $1/$HOME/out/$FILENAME.img"
 	exit 0
 else
 	echo ; echo 'Spindle has failed to create the image, please find out what went wrong and try again.'
