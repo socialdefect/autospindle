@@ -40,7 +40,7 @@ echo
 schroot -c spindle
 	errortest
 if [ `qemu --version | awk '{print $4}' | tr -d ','` != '1.0,1' ] ; then 
-	schroot -c spindle sudo ./downgrade_qemu
+	schroot -c spindle sudo downgrade_qemu
 	errortest
 fi
 
@@ -59,10 +59,14 @@ done
 if [ -e $2 ] ; then
 	echo '==> No stage4 given, building basic system only....'
 else
-	schroot -c spindle ./"$FILENAME"
+	schroot -c spindle "$FILENAME"
 fi
 
-schroot -c spindle ./helper export_image_for_release out/"$FILENAME".qed "$FILENAME".img
+if [ -e "$2" ] ; then
+	FILENAME="wheezy-stage3"
+fi
+
+schroot -c spindle helper export_image_for_release out/"$FILENAME".qed "$FILENAME".img
 
 if [ $? = 0 ] ; then
 	echo ; echo "Your Raspi image is ready in $1/$HOME/out/$FILENAME.img"
