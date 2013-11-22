@@ -63,7 +63,7 @@ else
 fi
 
 if [ -e "$2" ] ; then
-	FILENAME="wheezy-stage3"
+	FILENAME="stage3"
 fi
 
 schroot -c spindle helper export_image_for_release out/"$FILENAME".qed "$FILENAME".img
